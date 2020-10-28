@@ -1,0 +1,20 @@
+.App{
+    background: #2F303A ;
+    width: 100vw;
+    height: 100vh;
+}
+
+.center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-question{
+    background: white;
+    width: 50vw;
+    height: 70vh;
+}
+.btn{
+    margin: 40px;
+}
