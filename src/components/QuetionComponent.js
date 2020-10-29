@@ -11,37 +11,52 @@ function QuetionComponent() {
         }
         return a;
     }
-    shuffle(allQuestions)
+    //shuffle(allQuestions)
     
     const [index, setIndex] = useState(0)
-    const [question, setQuestion] = useState(allQuestions[index].question)
-    const [allAnswer, setAllAnswer] = useState(allQuestions[index].incorrect.concat(allQuestions[index].correct))
-    const [correctQuestion, setCorrectQuestion] = useState(allQuestions[index].correct)
+    const [question, setQuestion] = useState([])
+    const [allAnswer, setAllAnswer] = useState([])
+    const [correctQuestion, setCorrectQuestion] = useState([])
     const [playerAnswer, setPlayerAnswer] = useState('')
     const [isAnswer, setIsAnswer] = useState(false)
     const [score, setScore] = useState(0)
+    const [isOver, setIsOver] = useState(true)
+   
 
     function handleNextQuestion(){
-
         if (index < allQuestions.length){
-            setIndex(index+1)
-            setQuestion(allQuestions[index].question)
+            setIndex(prevIndex => prevIndex + 1)
+            //setQuestion(allQuestions[index].question)
             setIsAnswer(false)
             setPlayerAnswer('')
             setCorrectQuestion(allQuestions[index].correct)
             setAllAnswer(allQuestions[index].incorrect.concat(allQuestions[index].correct))
-            //shuffle(allAnswer)
+            setQuestion(allQuestions[index].question)
+            setAllAnswer(allQuestions[index].incorrect.concat(allQuestions[index].correct))
+            setCorrectQuestion(allQuestions[index].correct)
         }else{
-            console.log('no more questions')
+            setIsOver(false)
         }
-       
+    }
+
+    // It was possible to reload the browser to clear all state, but I preffer do it without reload the page. That's a strength of React Js
+    function handleNewGame(){
+        setIndex(0)
+        setQuestion([])
+        setAllAnswer([])
+        setCorrectQuestion([])
+        setPlayerAnswer('')
+        setIsAnswer(false)
+        setScore(0)
+        setIsOver(true)
     }
     
-    const result = <p>Bonne reponse. Keep going!!!</p>
-    const resultCorrect = <p>Mauvaise reponse, la bonne reponse est: {correctQuestion}</p>
+    const result = <p>Nice &#128175;. Keep going!!!</p>
+    const resultCorrect = <p>Wrong answer, The correct answer is : {correctQuestion}</p>
    
     return (
-        <div className='box-question card'>
+        <>
+            <div className={`box-question card ${ !isOver ? 'display' : ''}`}>
             <div className="card-body">
                 <h5 className="card-title">{question}</h5>    
                 <div className="answers">
@@ -67,8 +82,16 @@ function QuetionComponent() {
                 
             </div>
             
-            <button className="btn btn-primary" onClick={handleNextQuestion}>Next Questions</button>
-        </div>
+            <button className="btn btn-primary" onClick={handleNextQuestion}>{`${index === 0 ? 'Start a new game' : 'Next Question'}`}</button>
+            </div>
+
+            <div className={`box-question card ${!isOver ? '' : 'display'}`}>
+                <div className="card-body center score">
+                    {score} 
+                </div>
+                <button className="btn btn-primary" onClick={handleNewGame}>Restart the game</button>
+            </div>
+        </>
 
     )
 }
